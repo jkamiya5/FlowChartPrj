@@ -8,6 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Private Sub ŒJ‚è•Ô‚µƒ{ƒ^ƒ“_Click()
+
   Worksheets("Sheet2").Activate
   ''Worksheets("Sheet2").Range(Cells(1, 1), Cells(1000, 1000)).Clear
   Do While Sheet2.Shapes.Count > 0
