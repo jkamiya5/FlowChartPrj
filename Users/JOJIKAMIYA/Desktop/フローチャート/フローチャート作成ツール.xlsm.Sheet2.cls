@@ -7,8 +7,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
-Dim objName(10) As String
+Dim objName(1) As String
 Dim ForLoopCondition(10) As String
+Dim ProcDescription(10) As String
 
 
 Private Sub フロー図生成_Click()
@@ -19,9 +20,19 @@ Private Sub フロー図生成_Click()
     
     ForLoopCondition(0) = "○○が～の間"
     Call CreateAutoShapeSample.CreateForLoopObj(ForLoopCondition(0))
+    ProcDescription(0) = "●●という処理を行う"
+    ProcDescription(1) = "cccという処理を行う"
+    ProcDescription(2) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
+    
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(0))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(1))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(2))
+        
     Call CommonFunctions.CenteringForGivenColumn("B5")
+    Call CommonFunctions.CenteringForGivenRow
+    
+
     
 End Sub
-
 
 

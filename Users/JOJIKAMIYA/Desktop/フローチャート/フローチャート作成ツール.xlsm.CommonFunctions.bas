@@ -1,5 +1,16 @@
 Attribute VB_Name = "CommonFunctions"
 Option Explicit
+
+
+Public Type Position
+    Left As Integer
+    Top As Integer
+    Right As Integer
+    Bottom As Integer
+    Width As Integer
+    Height As Integer
+End Type
+
 'すべての図形を削除する
 Public Sub ClearAllShapes()
     Dim delIdx As Long
@@ -24,6 +35,7 @@ Public Sub ClearSpecificShapes(objName() As String)
             For i = LBound(objName) To UBound(objName)
                 If .Shapes(delIdx).Name = objName(i) Then
                    delIdx = delIdx + 1
+                   Exit For
                 Else
                    .Shapes(delIdx).Delete
                 End If
@@ -58,27 +70,46 @@ Public Sub CenteringForGivenColumn(CellName As String)
 End Sub
 
 
-Public Sub 図形の位置取得(targetShape As Shape)
-  Dim 左 As Double, 上 As Double, 横幅 As Double, 縦幅 As Double
-  Dim 右 As Double, 下 As Double
-  If TypeName(targetShape) = "Range" Then
-    MsgBox "図形が選択されていません", vbCritical
-    Exit Sub
-  End If
-  With targetShape.ShapeRange
-    If .Count > 1 Then
-      MsgBox "図形は複数選択しないでください", vbCritical
-      Exit Sub
-    End If
-    左 = .Left                               'セル の左位置
-    上 = .Top                               'セル の上位置
-    横幅 = .Width                          'セル の横幅
-    縦幅 = .Height                         'セル の縦幅
-    右 = 左 + 横幅                        'セル の右位置
-    下 = 上 + 縦幅                        'セル の下位置
-    MsgBox "左位置は　" & Format(左, "0.00") & "　です" & vbCrLf & _
-    "上位置は　" & Format(上, "0.00") & "　です" & vbCrLf & _
-    "右位置は　" & Format(右, "0.00") & "　です" & vbCrLf & _
-    "下位置は　" & Format(下, "0.00") & "　です", Title:="図形の位置（ポイント）"
-  End With
+'オートシェイプを指定のセルを軸にしてセンタリングする
+Public Sub CenteringForGivenRow()
+    
+    
+    Dim Top As Integer
+    Dim Bottom As Integer
+    Dim TargetCount As Integer
+    Top = 0
+    Bottom = 0
+    TargetCount = 0
+    
+    'アクティブなオートシェイプを取得
+    ActiveSheet.Shapes.SelectAll
+    Dim Myshp As Variant
+    For Myshp = 1 To Selection.ShapeRange.Count
+        If Selection.ShapeRange(Myshp).Name <> "CommentShape" _
+            And Selection.ShapeRange(Myshp).Name <> "Line" Then
+            If Selection.ShapeRange(Myshp).Name = "ForStartShape" Then
+                '始端の位置を取得
+                Top = Selection.ShapeRange(Myshp).Top
+            ElseIf Selection.ShapeRange(Myshp).Name = "ForEndShape" Then
+                '終端の位置を取得
+                Bottom = Selection.ShapeRange(Myshp).Top
+            End If
+            If Selection.ShapeRange(Myshp).Name = "ProcShape" Then
+                '｢処理｣シェイプの数取得
+                TargetCount = TargetCount + 1
+            End If
+        End If
+    Next
+    
+    Dim i As Integer
+    i = 1
+    For Myshp = 1 To Mycount
+        '｢処理｣シェイプを等間隔に配置
+        If Selection.ShapeRange(Myshp).Name = "ProcShape" Then
+            Selection.ShapeRange(Myshp).Top = Top + (Bottom - Top) / (TargetCount + 1) * i
+            i = i + 1
+        End If
+    Next
 End Sub
+
+
