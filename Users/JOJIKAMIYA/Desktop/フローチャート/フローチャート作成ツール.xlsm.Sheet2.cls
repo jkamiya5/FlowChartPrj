@@ -18,18 +18,49 @@ Private Sub フロー図生成_Click()
     '上記のオブジェクト以外削除
     Call CommonFunctions.ClearSpecificShapes(objName)
     
-    ForLoopCondition(0) = "○○が～の間"
-    Call CreateAutoShapeSample.CreateForLoopObj(ForLoopCondition(0))
     ProcDescription(0) = "●●という処理を行う"
     ProcDescription(1) = "cccという処理を行う"
     ProcDescription(2) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
-    
+    ProcDescription(3) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
+    ProcDescription(4) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
+    ProcDescription(5) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
+    ProcDescription(6) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
+    ProcDescription(7) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
+    ProcDescription(8) = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddという処理を行う"
+    '処理1を生成
     Call CreateAutoShapeSample.CreateProcObj(ProcDescription(0))
+    '処理2を生成
     Call CreateAutoShapeSample.CreateProcObj(ProcDescription(1))
+    '処理3を生成
     Call CreateAutoShapeSample.CreateProcObj(ProcDescription(2))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(3))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(4))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(5))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(6))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(7))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(8))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(2))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(3))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(4))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(5))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(6))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(7))
+    Call CreateAutoShapeSample.CreateProcObj(ProcDescription(8))
+    
+    
+    ForLoopCondition(0) = "○○が～の間"
+    'Forループを作成
+    Call CreateAutoShapeSample.CreateForLoopObj(ForLoopCondition(0))
         
+    '横方向のレイアウトを整える
     Call CommonFunctions.CenteringForGivenColumn("B5")
-    Call CommonFunctions.CenteringForGivenRow
+    '縦方向のレイアウトを整える
+    Call CommonFunctions.EquallySpacedAutoShapeForStatement
+    
+    ActiveSheet.Shapes.SelectAll
+    '始端から終端まで線で結ぶ
+    Call CommonFunctions.ConnecteStraightLineStartEnd(Selection.ShapeRange("ForStartShape"), Selection.ShapeRange("ForEndShape"))
+    
     
 
     

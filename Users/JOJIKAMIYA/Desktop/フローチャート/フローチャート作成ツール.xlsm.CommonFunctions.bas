@@ -2,14 +2,23 @@ Attribute VB_Name = "CommonFunctions"
 Option Explicit
 
 
-Public Type Position
-    Left As Integer
-    Top As Integer
-    Right As Integer
-    Bottom As Integer
-    Width As Integer
-    Height As Integer
-End Type
+'始端と終端を線で結ぶ
+Public Sub ConnecteStraightLineStartEnd(ForStartShape As Shape, ForEndShape As Shape)
+    Dim rngStart As Range, rngEnd As Range
+    Dim BX As Single, BY As Single, EX As Single, EY As Single
+    'セルのLeft、Top、Widthプロパティを利用して位置決め
+    BX = ForStartShape.Left + (ForStartShape.Width / 2)
+    BY = ForStartShape.Top + ForStartShape.Height
+    EX = ForEndShape.Left + (ForEndShape.Width / 2)
+    EY = ForEndShape.Top
+    '直線
+    With ActiveSheet.Shapes.AddLine(BX, BY, EX, EY).Line
+        .ForeColor.RGB = vbBlack
+        .Weight = 1
+        .Parent.Name = "Line1"
+    End With
+    ActiveSheet.Shapes("Line1").ZOrder msoSendToBack
+End Sub
 
 'すべての図形を削除する
 Public Sub ClearAllShapes()
@@ -70,10 +79,9 @@ Public Sub CenteringForGivenColumn(CellName As String)
 End Sub
 
 
-'オートシェイプを指定のセルを軸にしてセンタリングする
-Public Sub CenteringForGivenRow()
-    
-    
+'オートシェイプをFor文の中で等間隔に配置する
+Public Sub EquallySpacedAutoShapeForStatement()
+        
     Dim Top As Integer
     Dim Bottom As Integer
     Dim TargetCount As Integer
@@ -89,7 +97,7 @@ Public Sub CenteringForGivenRow()
             And Selection.ShapeRange(Myshp).Name <> "Line" Then
             If Selection.ShapeRange(Myshp).Name = "ForStartShape" Then
                 '始端の位置を取得
-                Top = Selection.ShapeRange(Myshp).Top
+                Top = Selection.ShapeRange(Myshp).Top + Selection.ShapeRange(Myshp).Height
             ElseIf Selection.ShapeRange(Myshp).Name = "ForEndShape" Then
                 '終端の位置を取得
                 Bottom = Selection.ShapeRange(Myshp).Top
@@ -100,16 +108,36 @@ Public Sub CenteringForGivenRow()
             End If
         End If
     Next
+        
     
-    Dim i As Integer
-    i = 1
-    For Myshp = 1 To Mycount
+    '全処理シェイプの長さの和が｢始端の下｣から｢終端の上｣までの長さを超える場合
+    '始端から終端を合計の長さより多く取る
+    Dim j As Integer
+    Dim TotalLength As Integer
+    For j = 1 To Selection.ShapeRange.Count
         '｢処理｣シェイプを等間隔に配置
-        If Selection.ShapeRange(Myshp).Name = "ProcShape" Then
-            Selection.ShapeRange(Myshp).Top = Top + (Bottom - Top) / (TargetCount + 1) * i
-            i = i + 1
+        If Selection.ShapeRange(j).Name = "ProcShape" Then
+            TotalLength = TotalLength + (Selection.ShapeRange(j).Top + Selection.ShapeRange(j).Height)
         End If
     Next
+    If TotalLength >= Top + Bottom Then
+        Selection.ShapeRange("ForEndShape").Top = Selection.ShapeRange("ForEndShape").Top + TotalLength
+        Bottom = Selection.ShapeRange("ForEndShape").Top
+    End If
+    
+    '等間隔に配置する
+    Dim i As Integer
+    Dim ProcShapeIndex As Integer
+    ProcShapeIndex = 1
+    For i = 1 To Selection.ShapeRange.Count
+        '｢処理｣シェイプを等間隔に配置
+        If Selection.ShapeRange(i).Name = "ProcShape" Then
+            Selection.ShapeRange(i).Top = Top + (Bottom - Top) / (TargetCount + 1) * ProcShapeIndex
+            ProcShapeIndex = ProcShapeIndex + 1
+        End If
+    Next
+
+    
 End Sub
 
 

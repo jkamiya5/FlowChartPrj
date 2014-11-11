@@ -35,22 +35,7 @@ Public Sub CreateForLoopObj(ForLoopCondition As String)
     CommentShape.TextFrame.Characters.Font.Color = 1
     CommentShape.TextFrame.HorizontalAlignment = xlLeft
     CommentShape.TextFrame.Characters.Text = ForLoopCondition
-    
-    
-    '始端と終端を線で結ぶ
-    Dim rngStart As Range, rngEnd As Range
-    Dim BX As Single, BY As Single, EX As Single, EY As Single
-    'セルのLeft、Top、Widthプロパティを利用して位置決め
-    BX = ForStartShape.Left + (ForStartShape.Width / 2)
-    BY = ForStartShape.Top + ForStartShape.Height
-    EX = ForEndShape.Left + (ForEndShape.Width / 2)
-    EY = ForEndShape.Top
-    '直線
-    With ActiveSheet.Shapes.AddLine(BX, BY, EX, EY).Line
-        .ForeColor.RGB = vbBlack
-        .Weight = 1
-        .Parent.Name = "Line"
-    End With
+        
 End Sub
 
 '処理を表すオートシェイプの生成
